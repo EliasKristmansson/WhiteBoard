@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "whiteboardfrontend", "WhiteBoardFrontEnd\whiteboardfrontend.esproj", "{03C69B34-2B2C-4BC8-864B-043C029CEC89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhiteBoardBackEnd", "..\WhiteBoardBackEnd\WhiteBoardBackEnd\WhiteBoardBackEnd.csproj", "{668CD262-5300-4132-B890-8C0F4BF54CA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03C69B34-2B2C-4BC8-864B-043C029CEC89}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{668CD262-5300-4132-B890-8C0F4BF54CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668CD262-5300-4132-B890-8C0F4BF54CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668CD262-5300-4132-B890-8C0F4BF54CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668CD262-5300-4132-B890-8C0F4BF54CA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2572F082-AEA7-46D0-A6BD-57EE55BF24E8}
+	EndGlobalSection
+EndGlobal
