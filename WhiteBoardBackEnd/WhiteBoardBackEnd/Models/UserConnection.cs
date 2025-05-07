@@ -3,7 +3,6 @@
     public class UserConnection
     {
         public string UserName { get; set; } = string.Empty;
-        public string ChatRoom { get; set; } = string.Empty;
-        public string ChatRole { get; set; } = string.Empty;
+        public string WhiteBoard { get; set; } = string.Empty;
     }
 }

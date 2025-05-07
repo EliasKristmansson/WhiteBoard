@@ -9,7 +9,7 @@
 		}
 	},
 	"profiles": {
-		"ChatApp": {
+		"WhiteBoardBackEnd": {
 			"commandName": "Project",
 			"dotnetRunMessages": true,
 			"launchBrowser": true,
