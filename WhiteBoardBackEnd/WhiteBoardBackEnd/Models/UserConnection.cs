@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Models
+﻿namespace WhiteBoardBackEnd.Models
 {
     public class UserConnection
     {

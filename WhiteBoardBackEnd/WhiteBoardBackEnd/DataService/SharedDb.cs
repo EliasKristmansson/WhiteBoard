@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using ChatApp.Models;
+using WhiteBoardBackEnd.Models;
 
-namespace ChatApp.DataService
+namespace WhiteBoardBackEnd.DataService
 {
     public class SharedDb
     {

@@ -13,7 +13,7 @@ const WhiteBoardHome = () => {
 		if (connection) {
 			connection.on("ReceiveMessage", (user, boardId) => {
 				console.log(`Server confirmed ${user} is in whiteboard ${boardId}`);
-				setWhiteBoard(boardId); // Only update if you trust the server to drive this
+				setWhiteBoard(boardId);
 			});
 
 			connection.onclose(() => {
@@ -48,8 +48,6 @@ const WhiteBoardHome = () => {
 	// Stänger av connectionen när användaren vill gå ur ett chatroom
 	const quitWhiteBoard = async () => {
 		setLoading(true);
-
-
 
 		// Kollar så att det finns en connection
 		if (connection) {

@@ -1,10 +1,10 @@
-﻿using ChatApp.DataService;
-using ChatApp.Models;
+﻿using WhiteBoardBackEnd.DataService;
+using WhiteBoardBackEnd.Models;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace ChatApp.Hubs
+namespace WhiteBoardBackEnd.Hubs
 {
     public class WhiteBoardHub : Hub
     {

@@ -1,5 +1,5 @@
-using ChatApp.Hubs;
-using ChatApp.DataService;
+using WhiteBoardBackEnd.DataService;
+using WhiteBoardBackEnd.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
