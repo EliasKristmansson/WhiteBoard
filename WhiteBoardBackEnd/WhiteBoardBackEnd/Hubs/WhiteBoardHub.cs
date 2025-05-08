@@ -21,14 +21,21 @@ namespace ChatApp.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, whiteBoard);
             _sharedDb.Connection[Context.ConnectionId] = new UserConnection { UserName = userName, WhiteBoard = whiteBoard};
 
-            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", "hello little bro.");
+            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", $"username: {userName}, whiteboard: {whiteBoard}), hello bro");
         }
 
-        public async Task QuitWhiteBoard(UserConnection connection)
+        public async Task QuitWhiteBoard(UserConnection userConnection)
         {
             // Ta bort en user från ett chatroom 
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, connection.WhiteBoard);
-            await Clients.Group(connection.WhiteBoard).SendAsync("ReceiveMessage", "goodbye little bro :(.");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, userConnection.WhiteBoard); 
+            _sharedDb.Connection.TryRemove(Context.ConnectionId, out _);
+
+            await Clients.Group(userConnection.WhiteBoard).SendAsync("ReceiveMessage", $"username: {userConnection.UserName}, {userConnection.WhiteBoard} goodbye little bro :(.");
+        }
+        public async Task ConnectWhiteBoard(string userName, string whiteBoard)
+        {
+            // Skickar ett meddelande i ett chatroom
+            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, whiteBoard);
         }
     }
 }
