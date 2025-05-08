@@ -2,18 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import WhiteBoard from './WhiteBoard';
 import WhiteBoardBox from './WhiteBoardBox';
+import ChatBox from './ChatBox';
 
 const WhiteBoardHome = () => {
 	const [connection, setConnection] = useState(null);
 	const [userName, setUserName] = useState('');
 	const [whiteBoard, setWhiteBoard] = useState('1');
 	const [loading, setLoading] = useState(false);
+	const [message, setMessage] = useState('');
+	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
 		if (connection) {
-			connection.on("ReceiveMessage", (user, boardId) => {
-				console.log(`Server confirmed ${user} is in whiteboard ${boardId}`);
-				setWhiteBoard(boardId);
+			connection.on("ReceiveMessage", (user, message) => {
+				// If message is undefined or user is a stringified message
+				if (!message) {
+					console.log(user); // system/log messages like "username joined..."
+				} else {
+					setMessages(prev => [...prev, { user, message }]);
+				}
 			});
 
 			connection.onclose(() => {
@@ -21,6 +28,7 @@ const WhiteBoardHome = () => {
 			});
 		}
 	}, [connection]);
+
 
 
 	// Sköter vad som händer när användare ansluter sig till chatt
@@ -76,9 +84,9 @@ const WhiteBoardHome = () => {
 	};
 
 	// Skickar ett meddelande, kallar på SendMessage i backend
-	const sendMessage = async (message) => {
+	const sendMessage = async (message, whiteBoard, userName) => {
 		if (connection) {
-			await connection.invoke("SendMessage", chatRoom, userName, message);
+			await connection.invoke("SendMessage", whiteBoard, userName, message);
 		}
 	};
 
@@ -99,6 +107,7 @@ const WhiteBoardHome = () => {
 						{/* Calls till komponenter, med parametrar */}
 						<WhiteBoard connection={connection} whiteBoard={whiteBoard} />
 						<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
+							<ChatBox userName={userName} sendMessage={sendMessage} whiteBoard={whiteBoard} messages={messages} quitWhiteBoard={quitWhiteBoard} />
 					</>
 				) : (
 					<div className="flex items-center justify-center min-h-screen bg-gray-900">

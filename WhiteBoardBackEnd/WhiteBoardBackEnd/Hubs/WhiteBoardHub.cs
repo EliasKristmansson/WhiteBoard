@@ -32,17 +32,17 @@ namespace WhiteBoardBackEnd.Hubs
 
             await Clients.Group(userConnection.WhiteBoard).SendAsync("ReceiveMessage", $"username: {userConnection.UserName}, {userConnection.WhiteBoard} goodbye little bro :(.");
         }
-        public async Task ConnectWhiteBoard(string userName, string whiteBoard)
+        public async Task SendMessage(string message, string whiteBoard, string userName)
         {
             // Skickar ett meddelande i ett chatroom
-            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, whiteBoard);
+            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, message);
         }
-        public async Task SendDrawData(float startX, float startY, float endX, float endY)
+        public async Task SendDrawData(float startX, float startY, float endX, float endY, string color)
         {
             // Look up the user's current whiteboard from the shared connection map
             if (_sharedDb.Connection.TryGetValue(Context.ConnectionId, out var userConnection) && userConnection.WhiteBoard != null)
             {
-                await Clients.OthersInGroup(userConnection.WhiteBoard).SendAsync("ReceiveDrawData", startX, startY, endX, endY);
+                await Clients.OthersInGroup(userConnection.WhiteBoard).SendAsync("ReceiveDrawData", startX, startY, endX, endY, color);
             }
             else
             {
