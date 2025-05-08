@@ -37,5 +37,20 @@ namespace WhiteBoardBackEnd.Hubs
             // Skickar ett meddelande i ett chatroom
             await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, whiteBoard);
         }
+        public async Task SendDrawData(float startX, float startY, float endX, float endY)
+        {
+            // Look up the user's current whiteboard from the shared connection map
+            if (_sharedDb.Connection.TryGetValue(Context.ConnectionId, out var userConnection) && userConnection.WhiteBoard != null)
+            {
+                await Clients.OthersInGroup(userConnection.WhiteBoard).SendAsync("ReceiveDrawData", startX, startY, endX, endY);
+            }
+            else
+            {
+                // Optional: log or notify client if they aren't in a group
+                await Clients.Caller.SendAsync("ReceiveMessage", "Server", "You must join a whiteboard before drawing.");
+            }
+        }
+
+
     }
 }

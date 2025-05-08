@@ -97,7 +97,7 @@ const WhiteBoardHome = () => {
 						</div>*/}
 
 						{/* Calls till komponenter, med parametrar */}
-						<WhiteBoard />
+						<WhiteBoard connection={connection} whiteBoard={whiteBoard} />
 						<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
 					</>
 				) : (
