@@ -34,9 +34,11 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
+        const scale = window.devicePixelRatio || 1;
         startPos.current = { x: offsetX, y: offsetY };
+
         if (tool === 'bucket') {
-            floodFill(offsetX, offsetY);
+            floodFill(Math.floor(offsetX * scale), Math.floor(offsetY * scale));
         } else {
             setIsDrawing(true);
         }
