@@ -12,7 +12,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 	};
 
 	return (
-		<div className="p-4 h-64 flex flex-col justify-between bg-gradient-to-r from-purple-500 to-indigo-600">
+		<div className="right-panel">
 			
 
 			{/* Message input */}

@@ -1,12 +1,11 @@
 .board {
     width: 100%; /* Full width of the left panel */
-    height: 80vh; /* Make the canvas occupy most of the panel height */
     border: 1px solid #ccc; /* Optional: border for the canvas */
 }
 
 .container {
-    text-align: center;
-    margin: auto;
+    display: flex;
+    width: 100%;
 }
 
 .tools-container {
@@ -16,8 +15,6 @@
 }
 
 .text-color {
-    display: inline-block;
-    color: black;
 }
 
 .color {
@@ -28,8 +25,6 @@
 }
 
 .tools {
-    display: flex;
-    gap: 10px;
 }
 
 .tools button.active {
@@ -38,10 +33,18 @@
 
 .left-panel {
     width: 70%; /* Adjust width of the left panel */
-    padding: 20px; /* Optional: add padding to the left panel */
+    padding: 1.25rem 1.25rem 0 1.25rem;
+    box-sizing:border-box;
 }
 
 .right-panel {
     width: 30%; /* Adjust width of the right panel */
     padding: 20px; /* Optional: add padding to the right panel */
+    background-color: white; /* Light background for the chat panel */
+    overflow-y: auto; /* Allow scrolling if content exceeds panel height */
+    box-sizing: border-box;
+    height: 74vh;
+    margin-top: 6.85vh;
+    border: 1px solid #ccc; /* Optional: border for the canvas */
+    margin-right: 1vw;
 }

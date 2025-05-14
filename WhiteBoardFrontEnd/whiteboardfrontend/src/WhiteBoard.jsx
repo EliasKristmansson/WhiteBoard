@@ -183,7 +183,6 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
     };
 
     return (
-        <div className="container">
             <div className="left-panel">
                 <div className="tools-container">
                     <label className="text-color">Color:</label>
@@ -216,7 +215,6 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
                     onMouseLeave={() => setIsDrawing(false)}
                 />
             </div>
-        </div>
     );
 };
 
