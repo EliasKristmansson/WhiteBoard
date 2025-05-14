@@ -115,7 +115,8 @@ const WhiteBoardHome = () => {
 								<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} />
 								<br />
 								<br />
-								{/* Låter användaren välja chatroom med en dropdown-meny */}
+										{/* Låter användaren välja chatroom med en dropdown-meny */}
+								<label>Rooms:</label>
 								<div className="whiteboard-buttons">
 									{["1", "2", "3", "4", "5"].map((room) => (
 										<button
@@ -130,7 +131,7 @@ const WhiteBoardHome = () => {
 								<br />
 
 								{/* Knapp för att joina ett chatroom */}
-								<button onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
+								<button className="join-button" onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
 							</div>
 
 						</div>
