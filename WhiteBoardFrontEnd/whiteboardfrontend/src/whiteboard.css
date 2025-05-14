@@ -1,0 +1,47 @@
+.board {
+    width: 100%; /* Full width of the left panel */
+    height: 80vh; /* Make the canvas occupy most of the panel height */
+    border: 1px solid #ccc; /* Optional: border for the canvas */
+}
+
+.container {
+    text-align: center;
+    margin: auto;
+}
+
+.tools-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.text-color {
+    display: inline-block;
+    color: black;
+}
+
+.color {
+}
+
+.text-tools {
+    color: black;
+}
+
+.tools {
+    display: flex;
+    gap: 10px;
+}
+
+.tools button.active {
+    background-color: darkgray;
+}
+
+.left-panel {
+    width: 70%; /* Adjust width of the left panel */
+    padding: 20px; /* Optional: add padding to the left panel */
+}
+
+.right-panel {
+    width: 30%; /* Adjust width of the right panel */
+    padding: 20px; /* Optional: add padding to the right panel */
+}

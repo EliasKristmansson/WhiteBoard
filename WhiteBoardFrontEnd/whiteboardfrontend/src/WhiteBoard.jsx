@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import "./App.css";
+import "./whiteboard.css";
 
 const WhiteBoard = ({ connection, whiteBoard }) => {
     const canvasRef = useRef(null);
@@ -16,7 +16,7 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
         canvas.style.border = "2px solid black";
         canvas.style.backgroundColor = "white";
 
-        const context = canvas.getContext("2d");
+        const context = canvas.getContext("2d", { willReadFrequently: true });
         context.lineCap = "round";
         context.lineWidth = 3;
         contextRef.current = context;
@@ -110,25 +110,44 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
     const floodFill = (x, y) => {
         const canvas = canvasRef.current;
         const ctx = contextRef.current;
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const width = canvas.width;
+        const height = canvas.height;
+        const imageData = ctx.getImageData(0, 0, width, height);
+
         const targetColor = getColorAtPixel(imageData, x, y);
         const fillColor = hexToRgba(color);
 
         if (colorsMatch(targetColor, fillColor)) return;
 
         const pixelStack = [[x, y]];
+        const visited = new Set();
 
         while (pixelStack.length) {
             const [px, py] = pixelStack.pop();
+
+            // Boundary check
+            if (px < 0 || py < 0 || px >= width || py >= height) continue;
+
+            const key = `${px},${py}`;
+            if (visited.has(key)) continue;
+            visited.add(key);
+
             const currentColor = getColorAtPixel(imageData, px, py);
             if (!colorsMatch(currentColor, targetColor)) continue;
 
             setColorAtPixel(imageData, px, py, fillColor);
-            pixelStack.push([px + 1, py], [px - 1, py], [px, py + 1], [px, py - 1]);
+
+            pixelStack.push(
+                [px + 1, py],
+                [px - 1, py],
+                [px, py + 1],
+                [px, py - 1]
+            );
         }
 
         ctx.putImageData(imageData, 0, 0);
     };
+
 
     const getColorAtPixel = (imageData, x, y) => {
         const index = (y * imageData.width + x) * 4;
@@ -158,26 +177,39 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
     };
 
     return (
-        <div className="whiteBoard p-4">
-            <div className="mb-2 flex gap-4 items-center">
-                <label className="text-white">Color:</label>
-                <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-                <label className="text-white">Tool:</label>
-                <select value={tool} onChange={(e) => setTool(e.target.value)}>
-                    <option value="pen">Pen</option>
-                    <option value="bucket">Bucket</option>
-                    <option value="square">Square</option>
-                    <option value="circle">Circle</option>
-                    <option value="triangle">Triangle</option>
-                </select>
+        <div className="container">
+            <div className="left-panel">
+                <div className="tools-container">
+                    <label className="text-color">Color:</label>
+                    <input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} className="color" />
+                    <label className="text-tools">Tool:</label>
+                    <div className="tools">
+                        <button onClick={() => setTool('pen')} className={tool === 'pen' ? 'active' : ''}>
+                            Pen
+                        </button>
+                        <button onClick={() => setTool('bucket')} className={tool === 'bucket' ? 'active' : ''}>
+                            Bucket
+                        </button>
+                        <button onClick={() => setTool('square')} className={tool === 'square' ? 'active' : ''}>
+                            Square
+                        </button>
+                        <button onClick={() => setTool('circle')} className={tool === 'circle' ? 'active' : ''}>
+                            Circle
+                        </button>
+                        <button onClick={() => setTool('triangle')} className={tool === 'triangle' ? 'active' : ''}>
+                            Triangle
+                        </button>
+                    </div>
+
+                </div>
+                <canvas className="board"
+                    ref={canvasRef}
+                    onMouseDown={startDrawing}
+                    onMouseUp={finishDrawing}
+                    onMouseMove={draw}
+                    onMouseLeave={() => setIsDrawing(false)}
+                />
             </div>
-            <canvas
-                ref={canvasRef}
-                onMouseDown={startDrawing}
-                onMouseUp={finishDrawing}
-                onMouseMove={draw}
-                onMouseLeave={() => setIsDrawing(false)}
-            />
         </div>
     );
 };
