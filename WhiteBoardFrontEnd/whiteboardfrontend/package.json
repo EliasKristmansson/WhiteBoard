@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://DoctorGravy.github.io/WhiteBoard",
+  "homepage": "https://EliasKristmansson.github.io/WhiteBoard",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
