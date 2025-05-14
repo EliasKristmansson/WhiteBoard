@@ -20,6 +20,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+
 app.UseCors("reactapp");
 app.UseHttpsRedirection();
 app.UseAuthorization();

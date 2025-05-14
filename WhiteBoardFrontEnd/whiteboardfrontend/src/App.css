@@ -18,14 +18,88 @@ canvas {
 }
 
 .login-container {
+    font-weight: 550;
     background-color: blue;
-    text-align: center;
+    text-align: left;
     width: 25vw;
     margin: 3rem auto 0 auto;
     padding: 2rem;
     border-radius: 10px;
+    background: #2e6ea3;
+    background: linear-gradient(180deg,rgba(46, 110, 163, 1) 0%, rgba(31, 138, 184, 1) 100%);
 }
 
 .connect-to-whiteboard {
-    margin: 0;
+    margin: 0 0 1rem;
 }
+
+.rest-of-login-container {
+    background: #3793c4;
+    background: linear-gradient(180deg,rgba(55, 147, 196, 1) 0%, rgba(67, 159, 217, 1) 92%);
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 2px 1px rgb(35,90,122);
+    padding: 1rem;
+}
+
+    .rest-of-login-container input {
+        width: 50%;
+        border: none;
+        height: 1.2rem;
+        border-radius: 3px;
+        box-shadow: 0 0 5px 1px rgb(56,130,178);
+    }
+
+        .rest-of-login-container input:focus {
+            outline: none;
+            box-shadow: 0 0 7px 2px rgb(46,109,147);
+        }
+
+    .rest-of-login-container button {
+        border: none;
+        background-color: #2D6FA8;
+        color: white;
+        font: inherit;
+        border-radius: 10px;
+        padding: 0.3125rem 0.625rem 0.3125rem 0.625rem;
+        font-size: 0.9rem;
+    }
+
+        .rest-of-login-container button:hover {
+            cursor: pointer;
+            background-color: #2A6191;
+            box-shadow: 0 0 2px 1px rgb(39,88,132);
+        }
+
+.chat-messages {
+    color: black;
+}
+
+
+.whiteboard-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.whiteboard-button {
+    border: none;
+    background-color: #2D6FA8;
+    color: white;
+    font: inherit;
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+    .whiteboard-button:hover {
+        cursor: pointer;
+        background-color: #2A6191;
+        box-shadow: 0 0 2px 1px rgb(39, 88, 132);
+    }
+
+    .whiteboard-button.selected {
+        background-color: #1E4E78;
+        box-shadow: inset 0 0 3px 2px rgb(30, 80, 120);
+    }

@@ -104,28 +104,35 @@ const WhiteBoardHome = () => {
 						{/* Calls till komponenter, med parametrar */}
 						<WhiteBoard connection={connection} whiteBoard={whiteBoard} />
 						<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
-							<ChatBox userName={userName} sendMessage={sendMessage} whiteBoard={whiteBoard} messages={messages} quitWhiteBoard={quitWhiteBoard} />
+						<ChatBox userName={userName} sendMessage={sendMessage} whiteBoard={whiteBoard} messages={messages} quitWhiteBoard={quitWhiteBoard} />
 					</>
 				) : (
 					<div className="flex items-center justify-center min-h-screen bg-gray-900">
 						<div className="login-container">
 							<h2 className="connect-to-whiteboard">Connect to Whiteboard</h2>
-							<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} />
-							<br />
-							<br />
-							{/* Låter användaren välja chatroom med en dropdown-meny */}
-							<select value={whiteBoard} onChange={(e) => setWhiteBoard(e.target.value)}>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-							</select>
-							<br />
-							<br />
+							<div className="rest-of-login-container">
+								<label>Name:</label><br />
+								<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} />
+								<br />
+								<br />
+								{/* Låter användaren välja chatroom med en dropdown-meny */}
+								<div className="whiteboard-buttons">
+									{["1", "2", "3", "4", "5"].map((room) => (
+										<button
+											key={room}
+											className={`whiteboard-button ${whiteBoard === room ? "selected" : ""}`}
+											onClick={() => setWhiteBoard(room)}
+										>
+											{room}
+										</button>
+									))}
+								</div>
+								<br />
 
-							{/* Knapp för att joina ett chatroom */}
-							<button onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
+								{/* Knapp för att joina ett chatroom */}
+								<button onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
+							</div>
+
 						</div>
 					</div>
 				)}

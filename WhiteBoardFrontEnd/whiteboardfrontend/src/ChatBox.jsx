@@ -30,7 +30,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 			</div>
 
 			{/* Chat messages */}
-			<div className="flex-1 overflow-y-auto bg-white rounded p-2 mb-2">
+			<div className="chat-messages">
 				{messages.map((msg, index) => (
 					<div key={index} className="mb-1">
 						<strong>{msg.user}:</strong> {msg.message}
