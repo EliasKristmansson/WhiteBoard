@@ -1,5 +1,5 @@
 body {
-    font-family: Figtree, sans-serif;
+    font-family: "Figtree", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
     margin: 0;
@@ -19,4 +19,13 @@ canvas {
 
 .login-container {
     background-color: blue;
+    text-align: center;
+    width: 25vw;
+    margin: 3rem auto 0 auto;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.connect-to-whiteboard {
+    margin: 0;
 }

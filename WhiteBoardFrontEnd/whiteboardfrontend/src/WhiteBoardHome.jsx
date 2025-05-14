@@ -109,7 +109,7 @@ const WhiteBoardHome = () => {
 				) : (
 					<div className="flex items-center justify-center min-h-screen bg-gray-900">
 						<div className="login-container">
-							<h2 className="text-xl font-bold mb-4 text-center">Connect to Whiteboard</h2>
+							<h2 className="connect-to-whiteboard">Connect to Whiteboard</h2>
 							<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} />
 							<br />
 							<br />
