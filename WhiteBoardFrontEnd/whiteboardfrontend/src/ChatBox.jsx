@@ -1,4 +1,5 @@
 import React from 'react';
+import "./App.css";
 
 const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }) => {
 	const [message, setMessage] = React.useState("");

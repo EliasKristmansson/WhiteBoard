@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./App.css";
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import WhiteBoard from './WhiteBoard';
 import WhiteBoardBox from './WhiteBoardBox';
@@ -92,18 +93,14 @@ const WhiteBoardHome = () => {
 
 	// Rendering
 	return (
-		<div className="flex flex-col h-screen bg-gray-900">
-			<main className="container mx-auto flex-grow">
+		<div>
+			<main>
 				{loading ? (
 					<div className="flex items-center justify-center h-full">
 						<p className="text-white">Connecting to chat room...</p>
 					</div>
 				) : connection ? (
 					<>
-						{ /*<div className="text-center text-2xl text-white font-semibold py-2 bg-gray-800 shadow">
-							{whiteBoard === "General" ? "General" : "Announcements"}
-						</div>*/}
-
 						{/* Calls till komponenter, med parametrar */}
 						<WhiteBoard connection={connection} whiteBoard={whiteBoard} />
 						<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
