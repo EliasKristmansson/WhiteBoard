@@ -133,7 +133,6 @@ const WhiteBoardHome = () => {
 								{/* Knapp för att joina ett chatroom */}
 								<button className="join-button" onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
 							</div>
-
 						</div>
 					</div>
 				)}
