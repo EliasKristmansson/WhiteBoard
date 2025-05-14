@@ -55,7 +55,7 @@ canvas {
             box-shadow: 0 0 7px 2px rgb(46,109,147);
         }
 
-    .rest-of-login-container button {
+    .rest-of-login-container .join-button {
         border: none;
         background-color: #2D6FA8;
         color: white;
@@ -65,7 +65,7 @@ canvas {
         font-size: 0.9rem;
     }
 
-        .rest-of-login-container button:hover {
+        .rest-of-login-container .join-button:hover {
             cursor: pointer;
             background-color: #2A6191;
             box-shadow: 0 0 2px 1px rgb(39,88,132);
@@ -84,12 +84,14 @@ canvas {
 }
 
 .whiteboard-button {
+    width:25px;
+    height:25px;
+    border-radius: 20px;
     border: none;
     background-color: #2D6FA8;
     color: white;
     font: inherit;
-    padding: 0.3125rem 0.625rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     transition: background-color 0.2s, box-shadow 0.2s;
 }
 
