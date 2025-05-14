@@ -11,12 +11,16 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        canvas.width = window.innerWidth * 0.8;
-        canvas.height = window.innerHeight * 0.6;
-        canvas.style.border = "2px solid black";
-        canvas.style.backgroundColor = "white";
+        const rect = canvas.getBoundingClientRect();
 
-        const context = canvas.getContext("2d", { willReadFrequently: true });
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        const context = canvas.getContext("2d");
+        context.scale(dpr, dpr);
         context.lineCap = "round";
         context.lineWidth = 3;
         contextRef.current = context;
@@ -181,7 +185,7 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
             <div className="left-panel">
                 <div className="tools-container">
                     <label className="text-color">Color:</label>
-                    <input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} className="color" />
+                    <input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
                     <label className="text-tools">Tool:</label>
                     <div className="tools">
                         <button onClick={() => setTool('pen')} className={tool === 'pen' ? 'active' : ''}>
