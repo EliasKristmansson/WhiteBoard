@@ -84,9 +84,9 @@ const WhiteBoardHome = () => {
 	};
 
 	// Skickar ett meddelande, kallar på SendMessage i backend
-	const sendMessage = async (message, whiteBoard, userName) => {
+	const sendMessage = async (whiteBoard, message, userName) => {
 		if (connection) {
-			await connection.invoke("SendMessage", whiteBoard, userName, message);
+			await connection.invoke("SendMessage", whiteBoard, message, userName);
 		}
 	};
 

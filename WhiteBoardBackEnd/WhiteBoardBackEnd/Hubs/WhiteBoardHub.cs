@@ -35,6 +35,7 @@ namespace WhiteBoardBackEnd.Hubs
         public async Task SendMessage(string message, string whiteBoard, string userName)
         {
             // Skickar ett meddelande i ett chatroom
+            Console.WriteLine(message);
             await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, message);
         }
         public async Task SendDrawData(float startX, float startY, float endX, float endY, string color)
