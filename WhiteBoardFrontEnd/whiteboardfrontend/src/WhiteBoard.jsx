@@ -49,17 +49,44 @@ const WhiteBoard = ({
 			});
 
 			connection.on("ReceiveCanvasImage", (imageDataUrl) => {
-				const canvas = canvasRef.current;
-				const ctx = contextRef.current;
 				const img = new Image();
 				img.onload = () => {
+					const ctx = contextRef.current;
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 				};
 				img.src = imageDataUrl;
 			});
 		}
+
+		const resizeCanvas = () => {
+			const rect = canvas.getBoundingClientRect();
+			const dpr = window.devicePixelRatio || 1;
+			const tempCanvas = document.createElement('canvas');
+			tempCanvas.width = canvas.width;
+			tempCanvas.height = canvas.height;
+			const tempCtx = tempCanvas.getContext('2d');
+			tempCtx.drawImage(canvas, 0, 0);
+
+			canvas.width = rect.width * dpr;
+			canvas.height = rect.height * dpr;
+			canvas.style.width = `${rect.width}px`;
+			canvas.style.height = `${rect.height}px`;
+
+			const context = canvas.getContext("2d", { willReadFrequently: true });
+			context.scale(dpr, dpr);
+			context.lineCap = "round";
+			context.lineWidth = 3;
+			context.drawImage(tempCanvas, 0, 0);
+			contextRef.current = context;
+		};
+
+		window.addEventListener('resize', resizeCanvas);
+		return () => {
+			window.removeEventListener('resize', resizeCanvas);
+		};
 	}, [connection]);
+
 
 	const startDrawing = ({ nativeEvent }) => {
 		const { offsetX, offsetY } = nativeEvent;
@@ -142,7 +169,7 @@ const WhiteBoard = ({
 		ctx.stroke();
 	};
 
-	const floodFill = (x, y) => {
+	const floodFill = async (x, y) => {
 		const canvas = canvasRef.current;
 		const ctx = contextRef.current;
 		const width = canvas.width;
