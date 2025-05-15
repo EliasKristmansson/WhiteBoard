@@ -13,22 +13,6 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 
 	return (
 		<div className="right-panel">
-			
-
-			{/* Message input */}
-			<div className="flex items-end space-x-2">
-				<textarea
-					className="w-full p-2 bg-white rounded-2xl resize-none"
-					rows="1"
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
-					placeholder="Type a message..."
-				/>
-				<button onClick={handleSend} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-					Send
-				</button>
-			</div>
-
 			{/* Chat messages */}
 			<div className="chat-messages">
 				{messages.map((msg, index) => (
@@ -36,6 +20,20 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 						<strong>{msg.user}:</strong> {msg.message}
 					</div>
 				))}
+			</div>
+
+			{/* Message input */}
+			<div className="chat-div">
+				<textarea
+					className="chat-textarea"
+					rows="3"
+					value={message}
+					onChange={(e) => setMessage(e.target.value)}
+					placeholder="Type a message..."
+				/>
+				<button onClick={handleSend}>
+					Send
+				</button>
 			</div>
 		</div>
 	);
