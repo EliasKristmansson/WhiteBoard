@@ -94,7 +94,10 @@ const WhiteBoardHome = () => {
 
 	// Rendering
 	return (
-		<div>
+		<div className="relative">
+			{!connection && (
+				<img src="/doodle.png" alt="background" className="background-img" />
+			)}
 			<main>
 				{loading ? (
 					<div className="flex items-center justify-center h-full">
