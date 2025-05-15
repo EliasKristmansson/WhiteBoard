@@ -14,42 +14,6 @@ canvas {
     height: 85vh; /* Occupy full viewport height */
 }
 
-/* Actual canvas styling */
-.board {
-    flex: 1;
-    border: 1px solid #ccc;
-    background-color: white; /* Optional but recommended */
-}
-
-/* Canvas wrapper */
-.left-panel {
-    width: 70%;
-    padding: 1.5rem 1.5rem 0 1.5rem;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-/* Chat/Right panel */
-.right-panel {
-    width: 30%;
-    padding: 20px;
-    background-color: white;
-    overflow-y: auto;
-    box-sizing: border-box;
-    margin-top: 3.188rem;
-    border: 1px solid #ccc;
-    margin-right: 1.5vw;
-}
-
-/* Tool controls */
-.tools-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .text-color,
 .text-tools {
     color: black;
@@ -59,22 +23,97 @@ canvas {
     background-color: darkgray;
 }
 
-.quitButtonContainer {
-}
 
 .quitButton {
-    float: right;
-    margin: 1.5rem 1.5rem 0 0;
-    border: 1px solid black;
-    border-radius: 5px;
+    border: none;
+    background-color: #2D6FA8;
+    color: white;
     font: inherit;
-    padding: 0.3125rem 0.625rem 0.3125rem 0.625rem;
+    border-radius: 10px;
+    padding: 0.3125rem 0.625rem;
     font-size: 0.9rem;
-    background-color: white;
     cursor: pointer;
-    transition: background-color 0.2s, box-shadow 0.2s;
+    margin-left: auto;
 }
 
     .quitButton:hover {
-        background-color: lightgray;
+        background-color: #2A6191;
+        box-shadow: 0 0 2px 1px rgb(39,88,132);
     }
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.2s;
+    padding: 5px;
+}
+
+    .icon-btn svg {
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .icon-btn:hover {
+        background: #e0e0e0;
+    }
+
+    .icon-btn.active {
+        background: #cce4ff;
+    }
+
+        .icon-btn.active svg {
+            color: white;
+        }
+
+.whiteboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.tools-container {
+    height: 60px; /* Adjust as needed */
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.main-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.canvas-container {
+    height: 80vh;
+    flex: 3;
+    background: white;
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    margin-left: 1rem; /* Add margin to left side */
+    margin-right: 0.5rem; /* Add spacing between canvas and chat */
+    overflow: hidden;
+}
+
+.chat-container {
+    height: 80vh;
+    flex-direction: column;
+    box-sizing: border-box;
+    flex: 1;
+    border-left: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 1.5rem;
+    margin-right: 1rem; /* Add right margin from edge */
+    
+}

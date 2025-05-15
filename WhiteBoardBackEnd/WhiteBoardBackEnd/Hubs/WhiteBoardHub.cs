@@ -51,7 +51,9 @@ namespace WhiteBoardBackEnd.Hubs
                 await Clients.Caller.SendAsync("ReceiveMessage", "Server", "You must join a whiteboard before drawing.");
             }
         }
-
-
+        public async Task SendCanvasImage(string imageDataUrl)
+        {
+            await Clients.Others.SendAsync("ReceiveCanvasImage", imageDataUrl);
+        }
     }
 }

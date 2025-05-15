@@ -1,13 +1,31 @@
 import React, { useRef, useEffect, useState } from 'react';
 import "./whiteboard.css";
+import {
+	PenTool,
+	PaintBucket,
+	Square,
+	Circle,
+	Triangle
+} from 'lucide-react';
+import ChatBox from './ChatBox';
+import WhiteBoardBox from './WhiteBoardBox';
 
-const WhiteBoard = ({ connection, whiteBoard }) => {
+const WhiteBoard = ({
+	connection,
+	whiteBoard,
+	messages,
+	message,
+	setMessage,
+	sendMessage,
+	userName,
+	quitWhiteBoard }) => {
 	const canvasRef = useRef(null);
 	const contextRef = useRef(null);
 	const [isDrawing, setIsDrawing] = useState(false);
 	const [color, setColor] = useState('#000000');
 	const [tool, setTool] = useState('pen'); // pen, bucket, square, circle, triangle
 	const startPos = useRef({ x: 0, y: 0 });
+
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -19,7 +37,7 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 		canvas.style.width = `${rect.width}px`;
 		canvas.style.height = `${rect.height}px`;
 
-		const context = canvas.getContext("2d");
+		const context = canvas.getContext("2d", { willReadFrequently: true });
 		context.scale(dpr, dpr);
 		context.lineCap = "round";
 		context.lineWidth = 3;
@@ -28,6 +46,17 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 		if (connection) {
 			connection.on("ReceiveDrawData", (startX, startY, endX, endY, remoteColor) => {
 				drawLine(startX, startY, endX, endY, remoteColor);
+			});
+
+			connection.on("ReceiveCanvasImage", (imageDataUrl) => {
+				const canvas = canvasRef.current;
+				const ctx = contextRef.current;
+				const img = new Image();
+				img.onload = () => {
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+				};
+				img.src = imageDataUrl;
 			});
 		}
 	}, [connection]);
@@ -152,6 +181,16 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 		}
 
 		ctx.putImageData(imageData, 0, 0);
+
+		if (connection) {
+			try {
+				const imageDataUrl = canvas.toDataURL();
+				await connection.invoke("SendCanvasImage", imageDataUrl);
+			} catch (err) {
+				console.error("Error sending canvas image:", err);
+			}
+		}
+
 	};
 
 
@@ -183,38 +222,58 @@ const WhiteBoard = ({ connection, whiteBoard }) => {
 	};
 
 	return (
-		<div className="left-panel">
+		<div className="whiteboard-container">
 			<div className="tools-container">
 				<label className="text-color">Color:</label>
 				<input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
 				<label className="text-tools">Tool:</label>
 				<div className="tools">
-					<button onClick={() => setTool('pen')} className={tool === 'pen' ? 'active' : ''}>
-						Pen
+					<button onClick={() => setTool('pen')} className={tool === 'pen' ? 'icon-btn active' : 'icon-btn'}>
+						<PenTool />
 					</button>
-					<button onClick={() => setTool('bucket')} className={tool === 'bucket' ? 'active' : ''}>
-						Bucket
+					<button onClick={() => setTool('bucket')} className={tool === 'bucket' ? 'icon-btn active' : 'icon-btn'}>
+						<PaintBucket />
 					</button>
-					<button onClick={() => setTool('square')} className={tool === 'square' ? 'active' : ''}>
-						Square
+					<button onClick={() => setTool('square')} className={tool === 'square' ? 'icon-btn active' : 'icon-btn'}>
+						<Square />
 					</button>
-					<button onClick={() => setTool('circle')} className={tool === 'circle' ? 'active' : ''}>
-						Circle
+					<button onClick={() => setTool('circle')} className={tool === 'circle' ? 'icon-btn active' : 'icon-btn'}>
+						<Circle />
 					</button>
-					<button onClick={() => setTool('triangle')} className={tool === 'triangle' ? 'active' : ''}>
-						Triangle
+					<button onClick={() => setTool('triangle')} className={tool === 'triangle' ? 'icon-btn active' : 'icon-btn'}>
+						<Triangle />
 					</button>
+					
+
 				</div>
 
+				<div className="spacer" />
+				<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
 			</div>
-			<canvas style={{ width: "100%" }}
-				className="board"
-				ref={canvasRef}
-				onMouseDown={startDrawing}
-				onMouseUp={finishDrawing}
-				onMouseMove={draw}
-				onMouseLeave={() => setIsDrawing(false)}
-			/>
+			<div className="main-area">
+				<div className="canvas-container">
+					<canvas style={{ width: "100%" }}
+						className="board"
+						ref={canvasRef}
+						onMouseDown={startDrawing}
+						onMouseUp={finishDrawing}
+						onMouseMove={draw}
+						onMouseLeave={() => setIsDrawing(false)}
+					/>
+				</div>
+				<div className="chat-container">
+					<ChatBox
+						messages={messages}
+						message={message}
+						setMessage={setMessage}
+						sendMessage={sendMessage}
+						userName={userName}
+						whiteBoard={whiteBoard}
+					/>
+
+				</div>
+			</div>
+
 		</div>
 	);
 };
