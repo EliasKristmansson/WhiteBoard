@@ -81,6 +81,7 @@ canvas {
     color: black;
     overflow-y: auto;
     flex-grow: 1;
+    
 }
 
 .right-panel {

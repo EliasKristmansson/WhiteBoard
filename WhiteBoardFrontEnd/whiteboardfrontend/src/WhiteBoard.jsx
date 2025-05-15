@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import ChatBox from './ChatBox';
 import WhiteBoardBox from './WhiteBoardBox';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 const WhiteBoard = ({
 	connection,
@@ -23,25 +24,42 @@ const WhiteBoard = ({
 	const contextRef = useRef(null);
 	const [isDrawing, setIsDrawing] = useState(false);
 	const [color, setColor] = useState('#000000');
-	const [tool, setTool] = useState('pen'); // pen, bucket, square, circle, triangle
+	const [tool, setTool] = useState('pen');
 	const startPos = useRef({ x: 0, y: 0 });
-
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		const rect = canvas.getBoundingClientRect();
-
-		const dpr = window.devicePixelRatio || 1;
-		canvas.width = rect.width * dpr;
-		canvas.height = rect.height * dpr;
-		canvas.style.width = `${rect.width}px`;
-		canvas.style.height = `${rect.height}px`;
-
 		const context = canvas.getContext("2d", { willReadFrequently: true });
-		context.scale(dpr, dpr);
-		context.lineCap = "round";
-		context.lineWidth = 3;
 		contextRef.current = context;
+
+		const setCanvasSize = () => {
+			const rect = canvas.parentElement.getBoundingClientRect();
+			const dpr = window.devicePixelRatio || 1;
+
+			const tempCanvas = document.createElement('canvas');
+			tempCanvas.width = canvas.width;
+			tempCanvas.height = canvas.height;
+			const tempCtx = tempCanvas.getContext('2d');
+			tempCtx.drawImage(canvas, 0, 0);
+
+			/*canvas.width = rect.width * dpr;
+			canvas.height = rect.height * dpr;
+			canvas.style.width = `${rect.width}px`;
+			canvas.style.height = `${rect.height}px`;
+
+			console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
+
+			const ctx = canvas.getContext("2d", { willReadFrequently: true });
+			ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any previous transforms
+			ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
+			ctx.lineCap = "round";
+			ctx.lineWidth = 3;
+			contextRef.current = ctx;*/
+
+		};
+
+		setCanvasSize();
+		window.addEventListener('resize', setCanvasSize);
 
 		if (connection) {
 			connection.on("ReceiveDrawData", (startX, startY, endX, endY, remoteColor) => {
@@ -52,6 +70,7 @@ const WhiteBoard = ({
 				const img = new Image();
 				img.onload = () => {
 					const ctx = contextRef.current;
+					ctx.setTransform(1, 0, 0, 1, 0, 0);
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 				};
@@ -59,41 +78,17 @@ const WhiteBoard = ({
 			});
 		}
 
-		const resizeCanvas = () => {
-			const rect = canvas.getBoundingClientRect();
-			const dpr = window.devicePixelRatio || 1;
-			const tempCanvas = document.createElement('canvas');
-			tempCanvas.width = canvas.width;
-			tempCanvas.height = canvas.height;
-			const tempCtx = tempCanvas.getContext('2d');
-			tempCtx.drawImage(canvas, 0, 0);
-
-			canvas.width = rect.width * dpr;
-			canvas.height = rect.height * dpr;
-			canvas.style.width = `${rect.width}px`;
-			canvas.style.height = `${rect.height}px`;
-
-			const context = canvas.getContext("2d", { willReadFrequently: true });
-			context.scale(dpr, dpr);
-			context.lineCap = "round";
-			context.lineWidth = 3;
-			context.drawImage(tempCanvas, 0, 0);
-			contextRef.current = context;
-		};
-
-		window.addEventListener('resize', resizeCanvas);
 		return () => {
-			window.removeEventListener('resize', resizeCanvas);
+			window.removeEventListener('resize', setCanvasSize);
 		};
 	}, [connection]);
 
-
 	const startDrawing = ({ nativeEvent }) => {
 		const { offsetX, offsetY } = nativeEvent;
-		const scale = window.devicePixelRatio || 1;
 		startPos.current = { x: offsetX, y: offsetY };
 
 		if (tool === 'bucket') {
+			const scale = window.devicePixelRatio || 1;
 			floodFill(Math.floor(offsetX * scale), Math.floor(offsetY * scale));
 		} else {
 			setIsDrawing(true);
@@ -134,6 +129,7 @@ const WhiteBoard = ({
 
 	const drawLine = (x1, y1, x2, y2, drawColor) => {
 		const ctx = contextRef.current;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.strokeStyle = drawColor;
 		ctx.beginPath();
 		ctx.moveTo(x1, y1);
@@ -144,12 +140,14 @@ const WhiteBoard = ({
 
 	const drawSquare = (start, end, drawColor) => {
 		const ctx = contextRef.current;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.strokeStyle = drawColor;
 		ctx.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
 	};
 
 	const drawCircle = (start, end, drawColor) => {
 		const ctx = contextRef.current;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		const radius = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
 		ctx.beginPath();
 		ctx.strokeStyle = drawColor;
@@ -159,12 +157,13 @@ const WhiteBoard = ({
 
 	const drawTriangle = (start, end, drawColor) => {
 		const ctx = contextRef.current;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		const baseMidX = (start.x + end.x) / 2;
 		ctx.beginPath();
 		ctx.strokeStyle = drawColor;
-		ctx.moveTo(baseMidX, start.y); // top
-		ctx.lineTo(end.x, end.y); // bottom right
-		ctx.lineTo(start.x, end.y); // bottom left
+		ctx.moveTo(baseMidX, start.y);
+		ctx.lineTo(end.x, end.y);
+		ctx.lineTo(start.x, end.y);
 		ctx.closePath();
 		ctx.stroke();
 	};
@@ -172,6 +171,7 @@ const WhiteBoard = ({
 	const floodFill = async (x, y) => {
 		const canvas = canvasRef.current;
 		const ctx = contextRef.current;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		const width = canvas.width;
 		const height = canvas.height;
 		const imageData = ctx.getImageData(0, 0, width, height);
@@ -186,8 +186,6 @@ const WhiteBoard = ({
 
 		while (pixelStack.length) {
 			const [px, py] = pixelStack.pop();
-
-			// Boundary check
 			if (px < 0 || py < 0 || px >= width || py >= height) continue;
 
 			const key = `${px},${py}`;
@@ -217,9 +215,7 @@ const WhiteBoard = ({
 				console.error("Error sending canvas image:", err);
 			}
 		}
-
 	};
-
 
 	const getColorAtPixel = (imageData, x, y) => {
 		const index = (y * imageData.width + x) * 4;
@@ -270,16 +266,14 @@ const WhiteBoard = ({
 					<button onClick={() => setTool('triangle')} className={tool === 'triangle' ? 'icon-btn active' : 'icon-btn'}>
 						<Triangle />
 					</button>
-					
-
 				</div>
-
 				<div className="spacer" />
 				<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
 			</div>
 			<div className="main-area">
 				<div className="canvas-container">
-					<canvas style={{ width: "100%" }}
+					<canvas
+						style={{ width: "100%" }}
 						className="board"
 						ref={canvasRef}
 						onMouseDown={startDrawing}
@@ -297,10 +291,8 @@ const WhiteBoard = ({
 						userName={userName}
 						whiteBoard={whiteBoard}
 					/>
-
 				</div>
 			</div>
-
 		</div>
 	);
 };

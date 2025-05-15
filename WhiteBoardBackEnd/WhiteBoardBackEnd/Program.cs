@@ -5,7 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register services
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 1024 * 1024; // 1 MB
+});
+
 builder.Services.AddSingleton<SharedDb>();
 builder.Services.AddCors(options =>
 {

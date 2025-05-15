@@ -51,7 +51,15 @@ namespace WhiteBoardBackEnd.Hubs
         }
         public async Task SendCanvasImage(string imageDataUrl)
         {
-            await Clients.Others.SendAsync("ReceiveCanvasImage", imageDataUrl);
+            if (_sharedDb.Connection.TryGetValue(Context.ConnectionId, out var userConnection) && userConnection.WhiteBoard != null)
+            {
+                await Clients.OthersInGroup(userConnection.WhiteBoard).SendAsync("ReceiveCanvasImage", imageDataUrl);
+            }
+            else
+            {
+                await Clients.Caller.SendAsync("ReceiveMessage", "Server", "You must join a whiteboard before sending canvas image.");
+            }
         }
+
     }
 }
