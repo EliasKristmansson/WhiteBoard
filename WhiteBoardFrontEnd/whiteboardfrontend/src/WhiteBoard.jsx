@@ -249,10 +249,13 @@ const WhiteBoard = ({
 	return (
 		<div className="whiteboard-container">
 			<div className="tools-container">
-				<label className="text-color">Color:</label>
-				<input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-				<label className="text-tools">Tool:</label>
+				<div className="color-part">
+					<label className="text-color">Color</label>
+					<input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+				</div>
+
 				<div className="tools">
+					<label className="text-tools">Tools</label>
 					<button onClick={() => setTool('pen')} className={tool === 'pen' ? 'icon-btn active' : 'icon-btn'}>
 						<PenTool />
 					</button>

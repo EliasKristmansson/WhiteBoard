@@ -49,6 +49,7 @@ canvas {
 }
 
     .rest-of-login-container input {
+        font:inherit;
         width: 100%;
         border: none;
         height: 1.5rem;
@@ -82,7 +83,6 @@ canvas {
     color: black;
     overflow-y: auto;
     flex-grow: 1;
-    
 }
 
 .right-panel {
@@ -124,6 +124,11 @@ canvas {
 
 .chat-textarea {
     width: 80%;
+    font: inherit;
+    resize: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
 }
 
 

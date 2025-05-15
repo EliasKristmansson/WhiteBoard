@@ -26,7 +26,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 			<div className="chat-div">
 				<textarea
 					className="chat-textarea"
-					rows="3"
+					rows="2"
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
 					placeholder="Type a message..."
