@@ -121,8 +121,8 @@ const WhiteBoardHome = () => {
 						<div className="login-container">
 							<h2 className="connect-to-whiteboard">Connect to Whiteboard</h2>
 							<div className="rest-of-login-container">
-								<label>Name:</label><br />
-								<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} />
+										<label>Name:</label><br />
+										<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} className="namebox" />
 								<br />
 								<br />
 								{/* Låter användaren välja chatroom med en dropdown-meny */}

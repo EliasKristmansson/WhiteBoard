@@ -4,6 +4,11 @@ body {
     font-style: normal;
     margin: 0;
     color: white;
+    background-image: url('/doodle.png'); /* replace with your file path */
+    background-size: cover; /* makes sure image covers full screen */
+    background-repeat: no-repeat; /* prevents tiling */
+    background-position: center; /* centers the image */
+    background-attachment: fixed; /* keeps it fixed when scrolling */
 }
 
 .whiteBoard {
@@ -21,7 +26,7 @@ canvas {
     font-weight: 550;
     background-color: blue;
     text-align: left;
-    width: 25vw;
+    width: 22vw;
     margin: 3rem auto 0 auto;
     padding: 2rem;
     border-radius: 10px;
@@ -43,9 +48,9 @@ canvas {
 }
 
     .rest-of-login-container input {
-        width: 50%;
+        width: 100%;
         border: none;
-        height: 1.2rem;
+        height: 1.5rem;
         border-radius: 3px;
         box-shadow: 0 0 5px 1px rgb(56,130,178);
     }
@@ -63,6 +68,7 @@ canvas {
         border-radius: 10px;
         padding: 0.3125rem 0.625rem 0.3125rem 0.625rem;
         font-size: 0.9rem;
+        width: 100%;
     }
 
         .rest-of-login-container .join-button:hover {
