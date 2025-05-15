@@ -33,28 +33,17 @@ const WhiteBoard = ({
 		contextRef.current = context;
 
 		const setCanvasSize = () => {
-			const rect = canvas.parentElement.getBoundingClientRect();
-			const dpr = window.devicePixelRatio || 1;
 
-			const tempCanvas = document.createElement('canvas');
-			tempCanvas.width = canvas.width;
-			tempCanvas.height = canvas.height;
-			const tempCtx = tempCanvas.getContext('2d');
-			tempCtx.drawImage(canvas, 0, 0);
+			const width = canvas.clientWidth;
+			const height = canvas.clientHeight;
 
-			/*canvas.width = rect.width * dpr;
-			canvas.height = rect.height * dpr;
-			canvas.style.width = `${rect.width}px`;
-			canvas.style.height = `${rect.height}px`;
+			if (canvas.width !== width || canvas.height !== height) {
+				canvas.width = width;
+				canvas.height = height;
+				return true;
+			}
 
-			console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
-
-			const ctx = canvas.getContext("2d", { willReadFrequently: true });
-			ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any previous transforms
-			ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
-			ctx.lineCap = "round";
-			ctx.lineWidth = 3;
-			contextRef.current = ctx;*/
+			return false;
 
 		};
 
@@ -88,26 +77,39 @@ const WhiteBoard = ({
 		startPos.current = { x: offsetX, y: offsetY };
 
 		if (tool === 'bucket') {
-			const scale = window.devicePixelRatio || 1;
-			floodFill(Math.floor(offsetX * scale), Math.floor(offsetY * scale));
+			floodFill(Math.floor(offsetX), Math.floor(offsetY));
 		} else {
 			setIsDrawing(true);
 		}
 	};
 
-	const finishDrawing = ({ nativeEvent }) => {
+	const finishDrawing = async ({ nativeEvent }) => {
 		if (!isDrawing) return;
 		setIsDrawing(false);
 
 		const { offsetX, offsetY } = nativeEvent;
+
 		if (tool === 'square') {
 			drawSquare(startPos.current, { x: offsetX, y: offsetY }, color);
 		} else if (tool === 'circle') {
 			drawCircle(startPos.current, { x: offsetX, y: offsetY }, color);
 		} else if (tool === 'triangle') {
 			drawTriangle(startPos.current, { x: offsetX, y: offsetY }, color);
+		} else {
+			return;
+		}
+
+		if (connection) {
+			try {
+				const canvas = canvasRef.current;
+				const imageDataUrl = canvas.toDataURL();
+				await connection.invoke("SendCanvasImage", imageDataUrl);
+			} catch (err) {
+				console.error("Error sending canvas image:", err);
+			}
 		}
 	};
+
 
 	const draw = async ({ nativeEvent }) => {
 		if (!isDrawing || tool !== 'pen') return;
