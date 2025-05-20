@@ -146,3 +146,24 @@ canvas {
 .tools label {
     margin-right: 0.5rem;
 }
+
+.brush-size {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+    .brush-size label {
+        width: 3.75rem;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .brush-size input[type="range"] {
+        width: 6.25rem;
+        min-width: 6.25rem;
+        max-width: 6.25rem;
+        flex-shrink: 0;
+    }

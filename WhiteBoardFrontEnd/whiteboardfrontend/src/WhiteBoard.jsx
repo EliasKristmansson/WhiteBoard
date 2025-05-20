@@ -5,7 +5,8 @@ import {
 	PaintBucket,
 	Square,
 	Circle,
-	Triangle
+	Triangle,
+	Eraser
 } from 'lucide-react';
 import ChatBox from './ChatBox';
 import WhiteBoardBox from './WhiteBoardBox';
@@ -26,6 +27,8 @@ const WhiteBoard = ({
 	const [color, setColor] = useState('#000000');
 	const [tool, setTool] = useState('pen');
 	const startPos = useRef({ x: 0, y: 0 });
+	const [brushSize, setBrushSize] = useState(5);
+
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -112,33 +115,39 @@ const WhiteBoard = ({
 
 
 	const draw = async ({ nativeEvent }) => {
-		if (!isDrawing || tool !== 'pen') return;
+		if (!isDrawing || (tool !== 'pen' && tool !== 'eraser')) return;
 
 		const { offsetX, offsetY } = nativeEvent;
 		const { x: lastX, y: lastY } = startPos.current;
 
-		drawLine(lastX, lastY, offsetX, offsetY, color);
+		const drawColor = tool === 'eraser' ? '#ffffff' : color;
+
+		drawLine(lastX, lastY, offsetX, offsetY, drawColor);
 		startPos.current = { x: offsetX, y: offsetY };
 
 		if (connection) {
 			try {
-				await connection.invoke("SendDrawData", lastX, lastY, offsetX, offsetY, color);
+				await connection.invoke("SendDrawData", lastX, lastY, offsetX, offsetY, drawColor);
 			} catch (err) {
 				console.error("Error sending draw data:", err);
 			}
 		}
 	};
 
+
 	const drawLine = (x1, y1, x2, y2, drawColor) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.strokeStyle = drawColor;
+		ctx.lineWidth = brushSize;
+		ctx.lineCap = "round";
 		ctx.beginPath();
 		ctx.moveTo(x1, y1);
 		ctx.lineTo(x2, y2);
 		ctx.stroke();
 		ctx.closePath();
 	};
+
 
 	const drawSquare = (start, end, drawColor) => {
 		const ctx = contextRef.current;
@@ -253,11 +262,21 @@ const WhiteBoard = ({
 					<label className="text-color">Color</label>
 					<input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
 				</div>
+				<div className="brush-size">
+					<label className="text-tools">Size: {brushSize}</label>
+					<input type="range" min="1" max="50" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} />
+
+				</div>
+
 
 				<div className="tools">
 					<label className="text-tools">Tools</label>
 					<button onClick={() => setTool('pen')} className={tool === 'pen' ? 'icon-btn active' : 'icon-btn'}>
 						<PenTool />
+					</button>
+					<button
+						onClick={() => setTool('eraser')} className={tool === 'eraser' ? 'icon-btn active' : 'icon-btn'}>
+						<Eraser />
 					</button>
 					<button onClick={() => setTool('bucket')} className={tool === 'bucket' ? 'icon-btn active' : 'icon-btn'}>
 						<PaintBucket />
@@ -271,6 +290,7 @@ const WhiteBoard = ({
 					<button onClick={() => setTool('triangle')} className={tool === 'triangle' ? 'icon-btn active' : 'icon-btn'}>
 						<Triangle />
 					</button>
+
 				</div>
 				<div className="spacer" />
 				<WhiteBoardBox quitWhiteBoard={quitWhiteBoard} />
