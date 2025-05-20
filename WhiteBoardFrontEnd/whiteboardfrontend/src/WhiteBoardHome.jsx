@@ -144,7 +144,17 @@ const WhiteBoardHome = () => {
 								<br />
 
 								{/* Knapp för att joina ett chatroom */}
-								<button className="join-button" onClick={() => joinWhiteBoard(userName, whiteBoard)}>Join Chat Room</button>
+										<button className="join-button" onClick={() => { const trimmedName = userName.trim();
+												if (!trimmedName) {
+													alert("Please enter a valid name (no empty or whitespace-only names).");
+													return;
+												}
+												joinWhiteBoard(trimmedName, whiteBoard);
+											}}
+										>
+											Join Chat Room
+										</button>
+
 							</div>
 						</div>
 					</div>

@@ -17,11 +17,17 @@ namespace WhiteBoardBackEnd.Hubs
 
         public async Task JoinWhiteBoard(string userName, string whiteBoard)
         {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                await Clients.Caller.SendAsync("ReceiveMessage", "Server", "Invalid user name.");
+                return;
+            }
+
             // Lägger till en användare i ett chatroom med hjälp av connection
             await Groups.AddToGroupAsync(Context.ConnectionId, whiteBoard);
             _sharedDb.Connection[Context.ConnectionId] = new UserConnection { UserName = userName, WhiteBoard = whiteBoard};
 
-            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", $"username: {userName}, whiteboard: {whiteBoard}), hello bro");
+            await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", "Server", $"{userName} has joined the whiteboard.");
         }
 
         public async Task QuitWhiteBoard(UserConnection userConnection)
@@ -30,7 +36,7 @@ namespace WhiteBoardBackEnd.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, userConnection.WhiteBoard); 
             _sharedDb.Connection.TryRemove(Context.ConnectionId, out _);
 
-            await Clients.Group(userConnection.WhiteBoard).SendAsync("ReceiveMessage", $"username: {userConnection.UserName}, {userConnection.WhiteBoard} goodbye little bro :(.");
+            await Clients.Group(userConnection.WhiteBoard).SendAsync("ReceiveMessage", "Server", $"{userConnection.UserName} has left the whiteboard.");
         }
         public async Task SendMessage(string message, string whiteBoard, string userName)
         {
