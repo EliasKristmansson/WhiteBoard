@@ -54,9 +54,10 @@ const WhiteBoard = ({
 		window.addEventListener('resize', setCanvasSize);
 
 		if (connection) {
-			connection.on("ReceiveDrawData", (startX, startY, endX, endY, remoteColor) => {
-				drawLine(startX, startY, endX, endY, remoteColor);
+			connection.on("ReceiveDrawData", (startX, startY, endX, endY, remoteColor, remoteBrushSize) => {
+				drawLine(startX, startY, endX, endY, remoteColor, remoteBrushSize);
 			});
+
 
 			connection.on("ReceiveCanvasImage", (imageDataUrl) => {
 				const img = new Image();
@@ -127,7 +128,7 @@ const WhiteBoard = ({
 
 		if (connection) {
 			try {
-				await connection.invoke("SendDrawData", lastX, lastY, offsetX, offsetY, drawColor);
+				await connection.invoke("SendDrawData", lastX, lastY, offsetX, offsetY, drawColor, brushSize);
 			} catch (err) {
 				console.error("Error sending draw data:", err);
 			}
@@ -135,11 +136,11 @@ const WhiteBoard = ({
 	};
 
 
-	const drawLine = (x1, y1, x2, y2, drawColor) => {
+	const drawLine = (x1, y1, x2, y2, drawColor, lineWidth = brushSize) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.strokeStyle = drawColor;
-		ctx.lineWidth = brushSize;
+		ctx.lineWidth = lineWidth;
 		ctx.lineCap = "round";
 		ctx.beginPath();
 		ctx.moveTo(x1, y1);

@@ -36,19 +36,19 @@ namespace WhiteBoardBackEnd.Hubs
         {
             await Clients.Group(whiteBoard).SendAsync("ReceiveMessage", userName, message);
         }
-        public async Task SendDrawData(float startX, float startY, float endX, float endY, string color)
+        public async Task SendDrawData(float startX, float startY, float endX, float endY, string color, int brushSize)
         {
-            // Look up the user's current whiteboard from the shared connection map
             if (_sharedDb.Connection.TryGetValue(Context.ConnectionId, out var userConnection) && userConnection.WhiteBoard != null)
             {
-                await Clients.OthersInGroup(userConnection.WhiteBoard).SendAsync("ReceiveDrawData", startX, startY, endX, endY, color);
+                await Clients.OthersInGroup(userConnection.WhiteBoard)
+                    .SendAsync("ReceiveDrawData", startX, startY, endX, endY, color, brushSize);
             }
             else
             {
-                // Optional: log or notify client if they aren't in a group
                 await Clients.Caller.SendAsync("ReceiveMessage", "Server", "You must join a whiteboard before drawing.");
             }
         }
+
         public async Task SendCanvasImage(string imageDataUrl)
         {
             if (_sharedDb.Connection.TryGetValue(Context.ConnectionId, out var userConnection) && userConnection.WhiteBoard != null)
