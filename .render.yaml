@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: whiteboard-backend
+    env: docker
+    repo: https://github.com/EliasKristmansson/WhiteBoard
+    rootDir: WhiteBoardBackEnd/WhiteBoardBackEnd
+    plan: free
+    dockerfilePath: ../Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+
+  - type: web
+    name: whiteboard-frontend
+    env: node
+    repo: https://github.com/EliasKristmansson/WhiteBoard
+    rootDir: WhiteBoardFrontEnd/whiteboardfrontend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
+    envVars:
+      - key: PORT
+        value: 3000
