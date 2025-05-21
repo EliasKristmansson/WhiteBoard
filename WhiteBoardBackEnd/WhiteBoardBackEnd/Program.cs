@@ -30,15 +30,16 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddPolicy("reactapp", policy =>
     {
-        builder
-            .WithOrigins("https://your-frontend-url.onrender.com")
+        policy
+            .WithOrigins("https://whiteboard-frontend-e304.onrender.com") // your real frontend URL
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials(); // Needed for SignalR
+            .AllowCredentials();
     });
 });
+
 
 var app = builder.Build();
 
@@ -51,7 +52,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors();
+app.UseCors("reactapp");
 app.MapHub<WhiteBoardHub>("/whiteboard");
 
 app.Run();
