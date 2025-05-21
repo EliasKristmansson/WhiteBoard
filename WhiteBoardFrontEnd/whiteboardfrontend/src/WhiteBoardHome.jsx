@@ -36,18 +36,18 @@ const WhiteBoardHome = () => {
 	// Sköter vad som händer när användare ansluter sig till chatt
 	const joinWhiteBoard = async (userName, whiteBoard) => {
 		setLoading(true);
+		setMessages([]);  // <-- Clear old messages here before starting a new connection
 
-		// Sätter connection, med hårdkodad URL för chathub
 		const connection = new HubConnectionBuilder()
 			.withUrl(`${import.meta.env.VITE_API_BASE_URL}/whiteboard`)
 			.configureLogging(LogLevel.Information)
 			.build();
 
-		setConnection(connection); // Sätter connection innan den skapas
+		setConnection(connection);
 
 		try {
-			await connection.start(); // Starta connection
-			await connection.invoke("JoinWhiteBoard", userName, whiteBoard); // Invokar servermetod för att joina chatroom
+			await connection.start();
+			await connection.invoke("JoinWhiteBoard", userName, whiteBoard);
 			setLoading(false);
 		} catch (error) {
 			console.error("Error starting connection: ", error);
@@ -75,13 +75,13 @@ const WhiteBoardHome = () => {
 				setLoading(false);
 			}
 			finally {
-				// Sätter alla värden tillbaka till sina standardvärden
-				// det viktiga är att connection är null, messages töms, och att user resettas
 				setConnection(null);
 				setUserName('');
 				setWhiteBoard('1');
+				setMessages([]);  // <-- Clear messages when quitting
 				setLoading(false);
 			}
+
 		}
 	};
 
