@@ -38,6 +38,8 @@ const WhiteBoardHome = () => {
 		setLoading(true);
 		setMessages([]);  // <-- Clear old messages here before starting a new connection
 
+
+		console.log("Connecting to:", `${import.meta.env.VITE_API_BASE_URL}/whiteboard`);
 		const connection = new HubConnectionBuilder()
 			.withUrl(`${import.meta.env.VITE_API_BASE_URL}/whiteboard`)
 			.configureLogging(LogLevel.Information)

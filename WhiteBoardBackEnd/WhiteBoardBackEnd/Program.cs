@@ -3,58 +3,56 @@ using WhiteBoardBackEnd.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register services
+// Usual service registrations
 builder.Services.AddControllers();
 builder.Services.AddSignalR(options =>
 {
-    options.MaximumReceiveMessageSize = 1024 * 1024; // 1 MB
+    options.MaximumReceiveMessageSize = 1024 * 1024;
 });
-
 builder.Services.AddSingleton<SharedDb>();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("reactapp", builder =>
-    {
-        builder.WithOrigins("http://localhost:5173", "https://eliaskristmansson.github.io")
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
-    });
-});
-
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.AddServerHeader = false;
-    options.ListenAnyIP(5000); // Allow HTTP on port 5000
-});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("reactapp", policy =>
     {
         policy
-            .WithOrigins("https://whiteboard-frontend-e304.onrender.com") // your real frontend URL
+            .WithOrigins(
+                "http://localhost:5173",
+                "https://eliaskristmansson.github.io",
+                "https://whiteboard-frontend-e304.onrender.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
 
+// Configure Kestrel for dynamic port or fallback ports
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+
+    var envPort = Environment.GetEnvironmentVariable("PORT");
+    if (!string.IsNullOrEmpty(envPort) && int.TryParse(envPort, out int port))
+    {
+        // On Render or any environment with PORT set, listen on that port (HTTP only)
+        options.ListenAnyIP(port);
+    }
+    else
+    {
+        // Local development: listen on HTTP and HTTPS with fixed ports
+        options.ListenAnyIP(5183);
+        options.ListenAnyIP(7264, listenOptions =>
+        {
+            listenOptions.UseHttps();
+        });
+    }
+});
 
 var app = builder.Build();
-
-builder.WebHost.UseUrls("http://0.0.0.0:" + Environment.GetEnvironmentVariable("PORT"));
-
-
 
 app.UseCors("reactapp");
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
-app.UseCors("reactapp");
 app.MapHub<WhiteBoardHub>("/whiteboard");
 
 app.Run();
-
-// Snus <3
