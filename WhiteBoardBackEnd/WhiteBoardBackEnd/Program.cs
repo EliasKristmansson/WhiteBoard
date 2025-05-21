@@ -22,6 +22,24 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+    options.ListenAnyIP(5000); // Allow HTTP on port 5000
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder
+            .WithOrigins("https://your-frontend-url.onrender.com")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Needed for SignalR
+    });
+});
+
 var app = builder.Build();
 
 
@@ -30,6 +48,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
 app.MapHub<WhiteBoardHub>("/whiteboard");
 
 app.Run();
