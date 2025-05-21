@@ -26,19 +26,20 @@ canvas {
 
 .quitButton {
     border: none;
-    background-color: #2D6FA8;
+    background-color: #f31728;
     color: white;
     font: inherit;
     border-radius: 10px;
-    padding: 0.3125rem 0.625rem;
+    padding: 0.3125rem 0.625rem 0.3125rem 0.625rem;
     font-size: 0.9rem;
     cursor: pointer;
     margin-left: auto;
 }
 
     .quitButton:hover {
-        background-color: #2A6191;
-        box-shadow: 0 0 2px 1px rgb(39,88,132);
+        cursor: pointer;
+        background-color: #b9121f;
+        box-shadow: 0 0 2px 1px #b9121f;
     }
 
 .icon-btn {
@@ -161,9 +162,7 @@ canvas {
         flex-shrink: 0;
     }
 
-    .brush-size input[type="range"] {
-        width: 6.25rem;
-        min-width: 6.25rem;
-        max-width: 6.25rem;
+    .brush-size input[type="range"]::-webkit-slider-runnable-track {
         flex-shrink: 0;
+        color: pink;
     }
