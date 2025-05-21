@@ -42,6 +42,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+builder.WebHost.UseUrls("http://0.0.0.0:" + Environment.GetEnvironmentVariable("PORT"));
+
+
 
 app.UseCors("reactapp");
 app.UseHttpsRedirection();
