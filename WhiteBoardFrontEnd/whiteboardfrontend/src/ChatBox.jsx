@@ -15,7 +15,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 		<div className="right-panel">
 			{/* Chat messages */}
 			<div className="chat-messages">
-				{messages.map((msg, index) => (
+				{messages.slice(-20).map((msg, index) => (
 					<div key={index} className="mb-1">
 						<strong>{msg.user}:</strong> {msg.message}
 					</div>
