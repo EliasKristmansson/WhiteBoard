@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("reactapp", builder =>
     {
-        builder.WithOrigins("http://localhost:5173")
+        builder.WithOrigins("http://localhost:5173", "https://eliaskristmansson.github.io")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();

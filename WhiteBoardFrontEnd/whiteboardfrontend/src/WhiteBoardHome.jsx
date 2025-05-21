@@ -39,7 +39,7 @@ const WhiteBoardHome = () => {
 
 		// Sätter connection, med hårdkodad URL för chathub
 		const connection = new HubConnectionBuilder()
-			.withUrl("https://whiteboard-backend.onrender.com/whiteboard")
+			.withUrl(`${import.meta.env.VITE_BACKEND_URL}/whiteboard`)
 			.configureLogging(LogLevel.Information)
 			.build();
 
