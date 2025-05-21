@@ -13,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "bootstrap": "^5.3.6",
     "lucide-react": "^0.510.0",
     "prop-types": "^15.8.1",
