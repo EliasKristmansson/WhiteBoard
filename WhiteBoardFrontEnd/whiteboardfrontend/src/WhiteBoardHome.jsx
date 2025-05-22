@@ -154,7 +154,7 @@ const WhiteBoardHome = () => {
 												joinWhiteBoard(trimmedName, whiteBoard);
 											}}
 										>
-											Join Chat Room
+											Join Whiteboard Room
 										</button>
 
 							</div>

@@ -12,7 +12,7 @@ const WhiteBoardBox = ({quitWhiteBoard}) => {
 				<button
 					onClick={() => quitWhiteBoard()}
 					className="quitButton">
-					Quit Chat Room
+					Quit Whiteboard Room
 				</button>
 			</div>
 		</div>
