@@ -4,6 +4,7 @@ import "./App.css";
 const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }) => {
 	const [message, setMessage] = React.useState("");
 
+	// Funktion för att skicka meddelanden från frontend
 	const handleSend = () => {
 		if (message.trim()) {
 			sendMessage(message, whiteBoard, userName);
@@ -13,7 +14,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 
 	return (
 		<div className="right-panel">
-			{/* Chat messages */}
+			{/* Chattmeddelanden */}
 			<div className="chat-messages">
 				{messages.slice(-23).map((msg, index) => (
 					<div key={index} className="mb-1">
@@ -22,7 +23,7 @@ const ChatBox = ({ userName, sendMessage, whiteBoard, quitWhiteBoard, messages }
 				))}
 			</div>
 
-			{/* Message input */}
+			{/* Textfält och knapp för att skriva och skicka meddelanden */}
 			<div className="chat-div">
 				<textarea
 					className="chat-textarea"

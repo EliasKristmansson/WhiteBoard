@@ -17,9 +17,8 @@ const WhiteBoardHome = () => {
 	useEffect(() => {
 		if (connection) {
 			connection.on("ReceiveMessage", (user, message) => {
-				// If message is undefined or user is a stringified message
 				if (!message) {
-					console.log(user); // system/log messages like "username joined..."
+					console.log(user);
 				} else {
 					setMessages(prev => [...prev, { user, message }]);
 				}
@@ -31,13 +30,10 @@ const WhiteBoardHome = () => {
 		}
 	}, [connection]);
 
-
-
 	// Sköter vad som händer när användare ansluter sig till chatt
 	const joinWhiteBoard = async (userName, whiteBoard) => {
 		setLoading(true);
-		setMessages([]);  // <-- Clear old messages here before starting a new connection
-
+		setMessages([]);
 
 		console.log("Connecting to:", `${import.meta.env.VITE_API_BASE_URL}/whiteboard`);
 		const connection = new HubConnectionBuilder()
@@ -80,7 +76,7 @@ const WhiteBoardHome = () => {
 				setConnection(null);
 				setUserName('');
 				setWhiteBoard('1');
-				setMessages([]);  // <-- Clear messages when quitting
+				setMessages([]);
 				setLoading(false);
 			}
 
@@ -119,15 +115,15 @@ const WhiteBoardHome = () => {
 							quitWhiteBoard={quitWhiteBoard}
 						/>
 
-						
+
 					</>
 				) : (
 					<div className="flex items-center justify-center min-h-screen bg-gray-900">
 						<div className="login-container">
 							<h2 className="connect-to-whiteboard">Connect to Whiteboard</h2>
 							<div className="rest-of-login-container">
-										<label>Name:</label><br />
-										<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} className="namebox" />
+								<label>Name:</label><br />
+								<input type="text" placeholder="Enter your name" value={userName} onChange={(e) => setUserName(e.target.value)} className="namebox" />
 								<br />
 								<br />
 								{/* Låter användaren välja chatroom med en dropdown-meny */}
@@ -146,16 +142,17 @@ const WhiteBoardHome = () => {
 								<br />
 
 								{/* Knapp för att joina ett chatroom */}
-										<button className="join-button" onClick={() => { const trimmedName = userName.trim();
-												if (!trimmedName) {
-													alert("Please enter a valid name (no empty or whitespace-only names).");
-													return;
-												}
-												joinWhiteBoard(trimmedName, whiteBoard);
-											}}
-										>
-											Join Whiteboard Room
-										</button>
+								<button className="join-button" onClick={() => {
+									const trimmedName = userName.trim();
+									if (!trimmedName) {
+										alert("Please enter a valid name (no empty or whitespace-only names).");
+										return;
+									}
+									joinWhiteBoard(trimmedName, whiteBoard);
+								}}
+								>
+									Join Whiteboard Room
+								</button>
 
 							</div>
 						</div>

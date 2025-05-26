@@ -29,12 +29,13 @@ const WhiteBoard = ({
 	const startPos = useRef({ x: 0, y: 0 });
 	const [brushSize, setBrushSize] = useState(5);
 
-
 	useEffect(() => {
+		// Initiera canvas
 		const canvas = canvasRef.current;
 		const context = canvas.getContext("2d", { willReadFrequently: true });
 		contextRef.current = context;
 
+		// Resizar canvas automatiskt
 		const setCanvasSize = () => {
 
 			const width = canvas.clientWidth;
@@ -53,12 +54,14 @@ const WhiteBoard = ({
 		setCanvasSize();
 		window.addEventListener('resize', setCanvasSize);
 
+		// SignalR-meddelanden
 		if (connection) {
+			// När någon annan ritar med penselverktyget
 			connection.on("ReceiveDrawData", (startX, startY, endX, endY, remoteColor, remoteBrushSize) => {
 				drawLine(startX, startY, endX, endY, remoteColor, remoteBrushSize);
 			});
 
-
+			// När någon annan använt ett verktyg så skickas hela canvasbilden
 			connection.on("ReceiveCanvasImage", (imageDataUrl) => {
 				const img = new Image();
 				img.onload = () => {
@@ -76,6 +79,7 @@ const WhiteBoard = ({
 		};
 	}, [connection]);
 
+	// Startar ritning eller fyllning om det är bucket tool
 	const startDrawing = ({ nativeEvent }) => {
 		const { offsetX, offsetY } = nativeEvent;
 		startPos.current = { x: offsetX, y: offsetY };
@@ -87,12 +91,14 @@ const WhiteBoard = ({
 		}
 	};
 
+	// Avslutar ritning och skickar till andra
 	const finishDrawing = async ({ nativeEvent }) => {
 		if (!isDrawing) return;
 		setIsDrawing(false);
 
 		const { offsetX, offsetY } = nativeEvent;
 
+		// De verktyg man kan välja att rita med
 		if (tool === 'square') {
 			drawSquare(startPos.current, { x: offsetX, y: offsetY }, color);
 		} else if (tool === 'circle') {
@@ -103,6 +109,7 @@ const WhiteBoard = ({
 			return;
 		}
 
+		// Skickar en kopia av canvasen till andra användare via SignalR
 		if (connection) {
 			try {
 				const canvas = canvasRef.current;
@@ -114,7 +121,7 @@ const WhiteBoard = ({
 		}
 	};
 
-
+	// För pensel och sudd-funktion skickas draw-data i realtid till andra användare
 	const draw = async ({ nativeEvent }) => {
 		if (!isDrawing || (tool !== 'pen' && tool !== 'eraser')) return;
 
@@ -135,7 +142,7 @@ const WhiteBoard = ({
 		}
 	};
 
-
+	// Penselverktyg, ritar en linje med rätt variabler
 	const drawLine = (x1, y1, x2, y2, drawColor, lineWidth = brushSize) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -149,7 +156,7 @@ const WhiteBoard = ({
 		ctx.closePath();
 	};
 
-
+	// Fyrkantsverktyg, ritar en fyrkant med rätt variabler
 	const drawSquare = (start, end, drawColor) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -157,6 +164,7 @@ const WhiteBoard = ({
 		ctx.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
 	};
 
+	// Cirkelverktyg, ritar en cirkel med rätt variabler
 	const drawCircle = (start, end, drawColor) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -167,6 +175,7 @@ const WhiteBoard = ({
 		ctx.stroke();
 	};
 
+	// Triangelverktyg, ritar en triangel med rätt variabler
 	const drawTriangle = (start, end, drawColor) => {
 		const ctx = contextRef.current;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -180,6 +189,7 @@ const WhiteBoard = ({
 		ctx.stroke();
 	};
 
+	// Bucketverktyg, fyller i en yta med rätt variabler
 	const floodFill = async (x, y) => {
 		const canvas = canvasRef.current;
 		const ctx = contextRef.current;
@@ -229,11 +239,13 @@ const WhiteBoard = ({
 		}
 	};
 
+	// Hjälpfunktion för floodFill
 	const getColorAtPixel = (imageData, x, y) => {
 		const index = (y * imageData.width + x) * 4;
 		return imageData.data.slice(index, index + 4);
 	};
 
+	// Hjälpfunktion för floodFill
 	const setColorAtPixel = (imageData, x, y, [r, g, b, a]) => {
 		const index = (y * imageData.width + x) * 4;
 		imageData.data[index] = r;
@@ -242,10 +254,12 @@ const WhiteBoard = ({
 		imageData.data[index + 3] = a;
 	};
 
+	// Hjälpfunktion för floodFill
 	const colorsMatch = (a, b) => {
 		return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 	};
 
+	// Hjälpfunktion för floodFill
 	const hexToRgba = (hex) => {
 		const bigint = parseInt(hex.slice(1), 16);
 		return [
@@ -256,21 +270,24 @@ const WhiteBoard = ({
 		];
 	};
 
+	// Renderblock
 	return (
 		<div className="whiteboard-container">
 			<div className="tools-container">
 				<div className="color-part">
+					{/* Välj färg */}
 					<label className="text-color">Color</label>
 					<input className="color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
 				</div>
 				<div className="brush-size">
+					{/* Välj penselstorlek */}
 					<label className="text-tools">Size: {brushSize}</label>
 					<input type="range" min="1" max="50" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} />
 
 				</div>
 
-
 				<div className="tools">
+					{/* Välj verktyg */}
 					<label className="text-tools">Tools</label>
 					<button onClick={() => setTool('pen')} className={tool === 'pen' ? 'icon-btn active' : 'icon-btn'}>
 						<PenTool />
@@ -298,6 +315,7 @@ const WhiteBoard = ({
 			</div>
 			<div className="main-area">
 				<div className="canvas-container">
+					{/* Canvas */}
 					<canvas
 						style={{ width: "100%" }}
 						className="board"
@@ -309,6 +327,7 @@ const WhiteBoard = ({
 					/>
 				</div>
 				<div className="chat-container">
+					{/* Chattbox */}
 					<ChatBox
 						messages={messages}
 						message={message}
