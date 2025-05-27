@@ -98,8 +98,8 @@ const WhiteBoardHome = () => {
 			)}
 			<main>
 				{loading ? (
-					<div className="flex items-center justify-center h-full">
-						<p className="text-white">Connecting to chat room...</p>
+					<div>
+						<p>Connecting to chat room...</p>
 					</div>
 				) : connection ? (
 					<>
@@ -114,11 +114,9 @@ const WhiteBoardHome = () => {
 							userName={userName}
 							quitWhiteBoard={quitWhiteBoard}
 						/>
-
-
 					</>
 				) : (
-					<div className="flex items-center justify-center min-h-screen bg-gray-900">
+					<div>
 						<div className="login-container">
 							<h2 className="connect-to-whiteboard">Connect to Whiteboard</h2>
 							<div className="rest-of-login-container">
